@@ -1,11 +1,11 @@
-# HumanInput
+# Human-input-validator
 
-`humaninput` validates and normalizes common data entered by people. It
+`Human-input-validator` validates and normalizes common data entered by people. It
 provides validators for email addresses, countries, usernames, phone
 numbers, and credit card numbers.
 
 ```python
-from humaninput import email, country, username, phonenumber, creditcard
+from human_input_validator import email, country, username, phonenumber, creditcard
 
 customer_email = email("Ada.Lovelace@Example.COM")
 customer_country = country("SWEDEN ")

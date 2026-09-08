@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "human-input-validator"
-version = "0.1.0"
+version = "0.1.2"
 description = "Small validators for common human-entered data."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -16,4 +16,4 @@ authors = [{name = "Snorlena"}]
 where = ["src"]
 
 [tool.setuptools.package-data]
-humaninput = ["py.typed"]
+human_input_validator = ["py.typed"]

@@ -3,7 +3,7 @@
 # pylint: disable=missing-class-docstring,missing-function-docstring
 import unittest
 
-from humaninput import (
+from human_input_validator import (
     ValidationError,
     email,
     country,
