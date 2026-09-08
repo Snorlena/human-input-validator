@@ -7,6 +7,8 @@ from .validators import (
     username,
     phonenumber,
     creditcard,
+    name,
+    lastname,
 )
 
 __all__ = [
@@ -16,4 +18,6 @@ __all__ = [
     "username",
     "phonenumber",
     "creditcard",
+    "name",
+    "lastname",
 ]

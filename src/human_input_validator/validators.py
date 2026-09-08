@@ -76,3 +76,19 @@ def creditcard(value: str) -> str:
     if not valid:
         raise ValidationError("Enter a valid creditcard number.")
     return normalized
+
+
+def name(value: str) -> str:
+    """Return a trimmed name with each part capitalized."""
+    normalized = value.strip()
+    if not normalized.replace(" ", "").isalpha():
+        raise ValidationError("Enter a valid name.")
+    return " ".join(part.capitalize() for part in normalized.split())
+
+
+def lastname(value: str) -> str:
+    """Return a trimmed last name with each part capitalized."""
+    normalized = value.strip()
+    if not normalized.replace(" ", "").isalpha():
+        raise ValidationError("Enter a valid last name.")
+    return " ".join(part.capitalize() for part in normalized.split())

@@ -10,6 +10,8 @@ from human_input_validator import (
     username,
     phonenumber,
     creditcard,
+    name,
+    lastname,
 )
 
 
@@ -61,6 +63,24 @@ class CreditcardTests(unittest.TestCase):
     def test_rejects_creditcard(self) -> None:
         with self.assertRaises(ValidationError):
             creditcard("0123-4567-8901-2345")
+
+
+class NameTests(unittest.TestCase):
+    def test_normalizes_name(self) -> None:
+        self.assertEqual(name("  ada lovelace "), "Ada Lovelace")
+
+    def test_rejects_name(self) -> None:
+        with self.assertRaises(ValidationError):
+            name("Ada123") 
+
+
+class LastnameTests(unittest.TestCase):
+    def test_normalizes_lastname(self) -> None:
+        self.assertEqual(lastname("  lovelace "), "Lovelace")
+
+    def test_rejects_lastname(self) -> None:
+        with self.assertRaises(ValidationError):
+            lastname("Lovelace123")
 
 
 if __name__ == "__main__":

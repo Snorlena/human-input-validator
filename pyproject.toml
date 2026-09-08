@@ -12,6 +12,9 @@ dependencies = ["pycountry>=26.2"]
 license = "MIT"
 authors = [{name = "Snorlena"}]
 
+[tool.black]
+target-version = ["py310"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
