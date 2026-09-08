@@ -2,16 +2,26 @@
 
 `Human-input-validator` validates and normalizes common data entered by people. It
 provides validators for email addresses, countries, usernames, phone
-numbers, and credit card numbers.
+numbers, names, and credit card numbers.
 
 ```python
-from human_input_validator import email, country, username, phonenumber, creditcard
+from human_input_validator import (
+  email,
+  country,
+  username,
+  phonenumber,
+  creditcard,
+  name,
+  lastname,
+)
 
 customer_email = email("Ada.Lovelace@Example.COM")
 customer_country = country("SWEDEN ")
 customer_username = username("JohnDoe ")
 customer_phone = phonenumber("08-0000000", "**-*******")
 customer_card = creditcard("4111 1111 1111 1111")
+customer_name = name("ada lovelace")
+customer_lastname = lastname("lovelace")
 ```
 
 Each function returns a normalized value or raises `ValidationError` for
@@ -27,6 +37,8 @@ invalid input.
   literally. `pattern` accepts a single mask or a list of masks.
 - `creditcard(value)` — checks a credit card number's length and Luhn
   checksum, ignoring spaces and dashes.
+- `name(value)` — returns a trimmed, capitalized name.
+- `lastname(value)` — returns a trimmed, capitalized last name.
 
 ## Development
 
