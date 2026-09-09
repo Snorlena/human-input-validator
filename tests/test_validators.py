@@ -12,6 +12,7 @@ from human_input_validator import (
     creditcard,
     name,
     lastname,
+    is_valid_url,
 )
 
 
@@ -81,6 +82,15 @@ class LastnameTests(unittest.TestCase):
     def test_rejects_lastname(self) -> None:
         with self.assertRaises(ValidationError):
             lastname("Lovelace123")
+
+
+class IsValidUrlTests(unittest.TestCase):
+    def test_normalizes_url(self) -> None:
+        self.assertEqual(is_valid_url("  https://example.com "), "https://example.com")
+
+    def test_rejects_invalid_url(self) -> None:
+        with self.assertRaises(ValidationError):
+            is_valid_url("not-a-url")
 
 
 if __name__ == "__main__":

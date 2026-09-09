@@ -9,6 +9,7 @@ from .validators import (
     creditcard,
     name,
     lastname,
+    is_valid_url
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "creditcard",
     "name",
     "lastname",
+    "is_valid_url"
 ]

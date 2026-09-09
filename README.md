@@ -13,6 +13,7 @@ from human_input_validator import (
   creditcard,
   name,
   lastname,
+  is_valid_url
 )
 
 customer_email = email("Ada.Lovelace@Example.COM")
@@ -22,6 +23,7 @@ customer_phone = phonenumber("08-0000000", "**-*******")
 customer_card = creditcard("4111 1111 1111 1111")
 customer_name = name("ada lovelace")
 customer_lastname = lastname("lovelace")
+customer_url = is_valid_url("https://example.com ")
 ```
 
 Each function returns a normalized value or raises `ValidationError` for
@@ -39,6 +41,7 @@ invalid input.
   checksum, ignoring spaces and dashes.
 - `name(value)` — returns a trimmed, capitalized name.
 - `lastname(value)` — returns a trimmed, capitalized last name.
+- `is_valid_url` — checks if an url is correct and returns a trimmed one
 
 ## Development
 

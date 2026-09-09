@@ -6,6 +6,7 @@ Each function returns a normalized value or raises :class:`ValidationError`.
 from __future__ import annotations
 
 import re
+import urllib.parse
 import pycountry
 
 
@@ -92,3 +93,15 @@ def lastname(value: str) -> str:
     if not normalized.replace(" ", "").isalpha():
         raise ValidationError("Enter a valid last name.")
     return " ".join(part.capitalize() for part in normalized.split())
+
+
+def is_valid_url(value: str) -> str:
+    """Checks if the given value is a valid HTTP(S) URL."""
+
+    normalized = value.strip()
+    parsed = urllib.parse.urlparse(normalized)
+
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise ValidationError("Enter a valid URL.")
+
+    return normalized
