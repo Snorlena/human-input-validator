@@ -41,7 +41,7 @@ invalid input.
   checksum, ignoring spaces and dashes.
 - `name(value)` — returns a trimmed, capitalized name.
 - `lastname(value)` — returns a trimmed, capitalized last name.
-- `is_valid_url` — checks if an url is correct and returns a trimmed one
+- `is_valid_url` — checks if an http/https url has correct syntax and returns a trimmed one
 
 ## Development
 
