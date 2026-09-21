@@ -5,6 +5,7 @@ Each function returns a normalized value or raises :class:`ValidationError`.
 
 from __future__ import annotations
 
+import difflib
 import functools
 import gettext
 import os
@@ -31,7 +32,12 @@ def _localized_country_names() -> dict[str, str]:
         except FileNotFoundError:
             continue
         for entry in pycountry.countries:
-            for candidate in filter(None, (entry.name, getattr(entry, "official_name", None))):
+            names = (
+                entry.name,
+                getattr(entry, "official_name", None),
+                getattr(entry, "common_name", None),
+            )
+            for candidate in filter(None, names):
                 translated = translation.gettext(candidate).strip().lower()
                 index.setdefault(translated, entry.alpha_2)
     return index
@@ -45,6 +51,9 @@ def email(value: str) -> str:
     return normalized
 
 
+_FUZZY_MATCH_CUTOFF = 0.8
+
+
 def country(value: str) -> str:
     """Return the official name of an ISO 3166-1 country, given its name or code in any supported language."""
     normalized = value.strip()
@@ -54,7 +63,15 @@ def country(value: str) -> str:
     except LookupError:
         pass
 
-    alpha_2 = _localized_country_names().get(normalized.lower())
+    index = _localized_country_names()
+    lowered = normalized.lower()
+    alpha_2 = index.get(lowered)
+    if alpha_2 is None:
+        # Fall back to fuzzy matching for close spelling variants (e.g. hyphenation
+        # or transliteration differences) not covered by the exact translation.
+        close_matches = difflib.get_close_matches(lowered, index.keys(), n=1, cutoff=_FUZZY_MATCH_CUTOFF)
+        if close_matches:
+            alpha_2 = index[close_matches[0]]
     if alpha_2 is None:
         raise ValidationError("Please enter a valid country")
     result = pycountry.countries.get(alpha_2=alpha_2)
