@@ -31,7 +31,8 @@ invalid input.
 
 - `email(value)` — returns a trimmed, lower-cased email address.
 - `country(value)` — returns the official ISO 3166-1 country name, given a
-  name or code.
+  name or code. Also accepts localized country names (e.g. "Deutschland",
+  "España") via pycountry's bundled translations.
 - `username(value, max_length=12)` — returns a lower-cased username, checking
   length and allowed characters.
 - `phonenumber(value, pattern)` — checks a phone number against one or more
