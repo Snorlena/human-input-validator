@@ -54,19 +54,27 @@ def email(value: str) -> str:
 _FUZZY_MATCH_CUTOFF = 0.8
 
 
-def _display_name(entry: object) -> str:
+def _display_name(entry: object, short: bool = False) -> str:
     """Prefer the short common name (e.g. 'Tanzania') over the formal ISO name."""
     common_name: str | None = getattr(entry, "common_name", None)
     name: str = getattr(entry, "name")
-    return common_name or name
+    if common_name:
+        return common_name
+    # No common_name available (e.g. 'Congo, The Democratic Republic of the');
+    # trim at the comma as a best-effort shortening.
+    return name.split(",", 1)[0] if short else name
 
 
-def country(value: str) -> str:
-    """Return the common name of an ISO 3166-1 country, given its name or code in any supported language."""
+def country(value: str, short: bool = False) -> str:
+    """Return the common name of an ISO 3166-1 country, given its name or code in any supported language.
+
+    If ``short`` is True, names without a common_name (e.g. 'Congo, The Democratic
+    Republic of the') are trimmed at the first comma instead of returned in full.
+    """
     normalized = value.strip()
     try:
         result = pycountry.countries.lookup(normalized)
-        return _display_name(result)
+        return _display_name(result, short)
     except LookupError:
         pass
 
@@ -84,7 +92,7 @@ def country(value: str) -> str:
     result = pycountry.countries.get(alpha_2=alpha_2)
     if result is None:
         raise ValidationError("Please enter a valid country")
-    return _display_name(result)
+    return _display_name(result, short)
 
 
 def username(value: str, max_length: int = 12) -> str:

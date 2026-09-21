@@ -35,6 +35,20 @@ class CountryTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             country("Kolbäck")
 
+    def test_full_name_without_common_name_is_unchanged(self) -> None:
+        self.assertEqual(
+            country("Congo, The Democratic Republic of the"),
+            "Congo, The Democratic Republic of the",
+        )
+
+    def test_short_trims_name_without_common_name(self) -> None:
+        self.assertEqual(
+            country("Congo, The Democratic Republic of the", short=True), "Congo"
+        )
+
+    def test_short_does_not_affect_common_name(self) -> None:
+        self.assertEqual(country("Tanzania", short=True), "Tanzania")
+
 
 class UsernameTests(unittest.TestCase):
     def test_normalizes_username(self) -> None:

@@ -30,9 +30,13 @@ Each function returns a normalized value or raises `ValidationError` for
 invalid input.
 
 - `email(value)` — returns a trimmed, lower-cased email address.
-- `country(value)` — returns the official ISO 3166-1 country name, given a
-  name or code. Also accepts localized country names (e.g. "Deutschland",
-  "España") via pycountry's bundled translations.
+- `country(value, short=False)` — returns the common ISO 3166-1 country name
+  (e.g. "Tanzania" instead of "Tanzania, United Republic of"), given a name
+  or code. Also accepts localized country names (e.g. "Deutschland",
+  "España") via pycountry's bundled translations. Some countries have no
+  common name in pycountry's data (e.g. "Congo, The Democratic Republic of
+  the"); pass `short=True` to trim those at the first comma instead of
+  returning the full formal name.
 - `username(value, max_length=12)` — returns a lower-cased username, checking
   length and allowed characters.
 - `phonenumber(value, pattern)` — checks a phone number against one or more
