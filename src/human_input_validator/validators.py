@@ -5,6 +5,9 @@ Each function returns a normalized value or raises :class:`ValidationError`.
 
 from __future__ import annotations
 
+import functools
+import gettext
+import os
 import re
 import urllib.parse
 import pycountry
@@ -18,6 +21,22 @@ _EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 _USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9]+$")
 
 
+@functools.lru_cache(maxsize=1)
+def _localized_country_names() -> dict[str, str]:
+    """Map lower-cased, translated country names (e.g. 'deutschland') to alpha-2 codes."""
+    index: dict[str, str] = {}
+    for locale in os.listdir(pycountry.LOCALES_DIR):
+        try:
+            translation = gettext.translation("iso3166-1", pycountry.LOCALES_DIR, languages=[locale])
+        except FileNotFoundError:
+            continue
+        for entry in pycountry.countries:
+            for candidate in filter(None, (entry.name, getattr(entry, "official_name", None))):
+                translated = translation.gettext(candidate).strip().lower()
+                index.setdefault(translated, entry.alpha_2)
+    return index
+
+
 def email(value: str) -> str:
     """Return a trimmed, lower-case email address."""
     normalized = value.strip().lower()
@@ -27,12 +46,20 @@ def email(value: str) -> str:
 
 
 def country(value: str) -> str:
-    """Return the official name of an ISO 3166-1 country, given its name or code."""
+    """Return the official name of an ISO 3166-1 country, given its name or code in any supported language."""
     normalized = value.strip()
     try:
         result = pycountry.countries.lookup(normalized)
-    except LookupError as error:
-        raise ValidationError("Please enter a valid country") from error
+        return result.name
+    except LookupError:
+        pass
+
+    alpha_2 = _localized_country_names().get(normalized.lower())
+    if alpha_2 is None:
+        raise ValidationError("Please enter a valid country")
+    result = pycountry.countries.get(alpha_2=alpha_2)
+    if result is None:
+        raise ValidationError("Please enter a valid country")
     return result.name
 
 
